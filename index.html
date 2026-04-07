@@ -35,12 +35,6 @@ body::before {
     radial-gradient(ellipse at 85% 85%,rgba(10,22,40,0.7) 0%,transparent 55%);
   pointer-events:none; z-index:0;
 }
-.spider-bg {
-  position:fixed; bottom:-60px; right:-60px; width:520px; height:520px;
-  z-index:0; pointer-events:none; opacity: 0.15;
-  background-image:url('data:image/png;base64,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');
-  background-size: contain; background-repeat: no-repeat;
-}
 .nav {
   position:sticky; top:0; z-index:100;
   background:rgba(13,13,13,0.95); backdrop-filter:blur(12px);
@@ -65,8 +59,7 @@ body::before {
 .heros-code-card {
   border:1px solid rgba(201,168,76,0.25);
   background:linear-gradient(145deg,rgba(123,13,30,0.25),rgba(10,22,40,0.6));
-  border-radius:4px; padding:36px 32px;
-  position:relative; overflow:hidden;
+  border-radius:4px; padding:36px 32px; position:relative; overflow:hidden;
 }
 .heros-code-card::after {
   content:'🕷'; position:absolute; bottom:-10px; right:16px;
@@ -94,67 +87,51 @@ body::before {
   margin:18px 0; opacity:0.45;
 }
 .heros-code-text { font-size:16px; line-height:1.85; color:rgba(245,240,232,0.88); font-style:italic; }
-.heros-code-text strong { color:var(--silk); font-style:normal; }
-.signature {
-  margin-top:20px; font-family:'Bebas Neue',sans-serif;
-  font-size:12px; letter-spacing:0.25em; color:var(--gold); opacity:0.7;
-}
+.signature { margin-top:20px; font-family:'Bebas Neue',sans-serif; font-size:12px; letter-spacing:0.25em; color:var(--gold); opacity:0.7; }
+
 .stats-row { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:24px 0; }
-.stat-card {
-  background:var(--faint); border:1px solid var(--border);
-  border-radius:3px; padding:14px 12px; text-align:center;
-}
+.stat-card { background:var(--faint); border:1px solid var(--border); border-radius:3px; padding:14px 12px; text-align:center; }
 .stat-val { font-family:'Bebas Neue',sans-serif; font-size:30px; color:var(--red); line-height:1; }
 .stat-label { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.18em; color:var(--dim); margin-top:3px; }
-.section-hdr { font-family:'Bebas Neue',sans-serif; font-size:clamp(22px,5vw,34px); letter-spacing:0.08em; color:var(--silk); margin-bottom:4px; }
+
+.section-hdr { font-family:'Bebas Neue',sans-serif; font-size:30px; color:var(--silk); margin-bottom:4px; }
 .section-hdr span { color:var(--red); }
-.date-line { font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.18em; color:var(--dim); margin-bottom:24px; }
+
 .mood-row { display:flex; flex-wrap:wrap; gap:7px; margin-bottom:24px; }
 .mood-pill {
-  font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.1em;
-  padding:5px 12px; border-radius:20px; border:1px solid var(--border);
-  color:var(--dim); cursor:pointer; transition:all 0.2s; user-select:none;
+  font-family:'JetBrains Mono',monospace; font-size:10px; padding:5px 12px; 
+  border-radius:20px; border:1px solid var(--border); color:var(--dim); cursor:pointer;
 }
-.mood-pill:hover,.mood-pill.active { border-color:var(--red); color:var(--silk); background:rgba(193,18,31,0.15); }
+.mood-pill.active { border-color:var(--red); color:var(--silk); background:rgba(193,18,31,0.15); }
+
 .pillar { margin-bottom:26px; border-left:3px solid var(--red); padding-left:18px; }
-.pillar-label { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.3em; color:var(--gold); margin-bottom:2px; }
-.pillar-title { font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:0.06em; color:var(--silk); margin-bottom:4px; }
-.pillar-desc { font-size:13px; color:var(--dim); margin-bottom:10px; font-style:italic; }
-.thread-input {
+.pillar-title { font-family:'Bebas Neue',sans-serif; font-size:20px; color:var(--silk); }
+.write-area {
   width:100%; background:var(--faint); border:1px solid var(--border);
-  border-radius:3px; color:var(--silk);
-  font-family:'Crimson Pro',Georgia,serif; font-size:15px;
-  padding:12px; outline:none; transition:border-color 0.2s; margin-bottom:10px;
+  border-radius:3px; color:var(--silk); font-family:inherit; font-size:16px;
+  padding:12px; margin-top:10px; outline:none;
 }
-.weight-bar { -webkit-appearance:none; width:100%; height:4px; background:var(--border); border-radius:2px; outline:none; margin:15px 0; }
-.weight-bar::-webkit-slider-thumb { -webkit-appearance:none; width:16px; height:16px; border-radius:50%; background:var(--red); cursor:pointer; border:2px solid var(--silk); }
-.choice-grid { display:grid; grid-template-columns:1fr 1fr; gap:7px; margin-bottom:10px; }
+.choice-grid { display:grid; grid-template-columns:1fr 1fr; gap:7px; margin-top:10px; }
 .choice-card {
-  background:var(--faint); border:1px solid var(--border);
-  border-radius:3px; padding:9px 11px; cursor:pointer;
-  transition:all 0.2s; font-size:11px; color:var(--dim);
-  text-align:center; font-family:'JetBrains Mono',monospace;
+  background:var(--faint); border:1px solid var(--border); padding:10px;
+  text-align:center; font-family:'JetBrains Mono',monospace; font-size:10px; cursor:pointer;
 }
-.choice-card.active { border-color:var(--gold); color:var(--gold); background:rgba(201,168,76,0.07); }
+.choice-card.active { border-color:var(--gold); color:var(--gold); }
+
 .save-btn {
-  display:block; width:100%; margin-top:26px; padding:16px;
-  background:linear-gradient(135deg,var(--deep-red),var(--red));
-  border:none; border-radius:3px; color:var(--silk);
-  font-family:'Bebas Neue',sans-serif; font-size:18px; letter-spacing:0.2em;
-  cursor:pointer;
+  width:100%; padding:16px; background:var(--red); border:none; color:white;
+  font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:2px; border-radius:3px;
 }
-.entry-card { background:var(--faint); border:1px solid var(--border); border-radius:3px; margin-bottom:12px; padding:15px; }
-.entry-date { font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--gold); }
+
+.entry-card { background:var(--faint); border:1px solid var(--border); padding:15px; margin-bottom:12px; }
+.entry-date { font-family:'JetBrains Mono',monospace; color:var(--gold); font-size:12px; }
 .delete-btn {
-  margin-top:14px; font-family:'JetBrains Mono',monospace; font-size:10px;
-  color:#ff4d4d; background:rgba(193,18,31,0.12); border:1px solid rgba(193,18,31,0.4);
-  padding:8px; cursor:pointer; width:100%;
+  margin-top:10px; background:none; border:1px solid #ff4d4d; color:#ff4d4d;
+  font-family:'JetBrains Mono',monospace; font-size:10px; padding:6px; width:100%;
 }
 </style>
 </head>
 <body>
-
-<div class="spider-bg"></div>
 
 <nav class="nav">
   <div class="nav-brand">RESPONSIBILITY JOURNAL</div>
@@ -169,7 +146,7 @@ body::before {
       <h1>THE HERO'S <span>CODE</span></h1>
       <div class="subtitle">AUTHENTICITY • IMPACT • REPAIR</div>
       <div class="divider"></div>
-      <p class="heros-code-text">"With great power comes <strong>Great Responsibility</strong>. Every choice is a thread in the web of your legacy. Do not let the web fray."</p>
+      <p class="heros-code-text">"With great power comes <strong>Great Responsibility</strong>. Every choice is a thread in the web of your legacy."</p>
       <div class="signature">— COMMANDER</div>
     </div>
 
@@ -180,43 +157,38 @@ body::before {
     </div>
 
     <div class="section-hdr">DAILY <span>ANCHOR</span></div>
-    <div class="date-line" id="current-date">APRIL 07, 2026</div>
-
-    <div class="mood-row" id="mood-picker">
+    
+    <div class="mood-row">
         <div class="mood-pill" onclick="setMood(this)">⚡ Charged</div>
         <div class="mood-pill" onclick="setMood(this)">🛡️ Disciplined</div>
         <div class="mood-pill" onclick="setMood(this)">🌑 Heavy</div>
-        <div class="mood-pill" onclick="setMood(this)">⚖️ Neutral</div>
+        <div class="mood-pill active" onclick="setMood(this)">⚖️ Neutral</div>
     </div>
 
     <div class="pillar">
-      <div class="pillar-label">PILLAR I</div>
-      <div class="pillar-title">IMPACT</div>
-      <textarea id="impact-note" class="thread-input" style="height:100px" placeholder="Threads added to the world today..."></textarea>
+      <div class="pillar-title">PILLAR I: IMPACT</div>
+      <textarea id="impact-note" class="write-area" placeholder="What threads did you move today?"></textarea>
     </div>
 
     <div class="pillar">
-      <div class="pillar-label">PILLAR II</div>
-      <div class="pillar-title">INTEGRITY</div>
+      <div class="pillar-title">PILLAR II: INTEGRITY</div>
       <div class="choice-grid">
-        <div class="choice-card" onclick="setIntegrity(this)">MAINTAINED</div>
+        <div class="choice-card active" onclick="setIntegrity(this)">MAINTAINED</div>
         <div class="choice-card" onclick="setIntegrity(this)">REPAIRED</div>
       </div>
-      <div class="weight-label">ACTION WEIGHT: <span id="weight-display">50%</span></div>
-      <input type="range" class="weight-bar" id="weight-slider" min="0" max="100" value="50" oninput="document.getElementById('weight-display').innerText=this.value+'%'">
     </div>
 
     <button class="save-btn" onclick="saveEntry()">ANCHOR TO THE WEB</button>
   </div>
 
   <div id="history" class="page">
-    <div class="section-hdr">PAST <span>THREADS</span></div>
+    <div class="section-hdr">THE <span>WEB</span></div>
     <div id="history-list"></div>
   </div>
 </div>
 
 <script>
-// THE CRITICAL KEY TO RECOVER YOUR DATA
+// THE KEY THAT LINKS TO YOUR SAVED DATA
 const STORAGE_KEY = 'falcon_journal_entries';
 
 let entries = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
@@ -244,46 +216,46 @@ function saveEntry() {
     const note = document.getElementById('impact-note').value;
     const mood = document.querySelector('.mood-pill.active')?.innerText || 'Neutral';
     const integrity = document.querySelector('.choice-card.active')?.innerText || 'Maintained';
-    const weight = document.getElementById('weight-slider').value;
 
-    if(!note) { alert("Action requires data."); return; }
+    if(!note) { alert("The web requires impact."); return; }
 
     const entry = {
         id: Date.now(),
         date: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
         impact: note,
         mood: mood,
-        integrity: integrity,
-        weight: weight
+        integrity: integrity
     };
 
     entries.unshift(entry);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
-    alert("Thread Locked.");
-    location.reload();
+    
+    document.getElementById('impact-note').value = '';
+    alert("Entry Anchored.");
+    showPage('history', document.querySelectorAll('.nav-tab')[1]);
 }
 
 function renderHistory() {
     const list = document.getElementById('history-list');
     if(entries.length === 0) {
-        list.innerHTML = '<div style="text-align:center; padding:50px; color:gray; font-family:monospace;">THE WEB IS EMPTY</div>';
+        list.innerHTML = '<div class="history-empty">No threads found.</div>';
         return;
     }
     list.innerHTML = entries.map(e => `
         <div class="entry-card">
-            <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+            <div style="display:flex; justify-content:space-between">
                 <span class="entry-date">${e.date}</span>
-                <span style="color:var(--red); font-family:Bebas Neue; font-size:18px;">${e.weight}%</span>
+                <span style="color:var(--red); font-family:Bebas Neue; font-size:14px;">${e.mood}</span>
             </div>
-            <div style="font-size:11px; color:var(--gold); margin-bottom:5px;">${e.mood} • ${e.integrity}</div>
-            <div style="line-height:1.6; color:rgba(245,240,232,0.8);">${e.impact}</div>
+            <div style="margin-top:10px; line-height:1.6;">${e.impact}</div>
+            <div style="font-size:10px; color:var(--gold); margin-top:5px;">Integrity: ${e.integrity}</div>
             <button class="delete-btn" onclick="deleteEntry(${e.id})">CUT THREAD</button>
         </div>
     `).join('');
 }
 
 function deleteEntry(id) {
-    if(confirm("Confirm thread deletion?")) {
+    if(confirm("Cut this thread forever?")) {
         entries = entries.filter(e => e.id !== id);
         localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
         renderHistory();
@@ -296,9 +268,9 @@ function updateStats() {
     document.getElementById('stat-impact').innerText = entries.length;
 }
 
-// Set Date
-document.getElementById('current-date').innerText = new Date().toLocaleDateString('en-US', { month: 'long', day: '2-digit', year: 'numeric' }).toUpperCase();
+// Initial update
 updateStats();
 </script>
+
 </body>
 </html>
