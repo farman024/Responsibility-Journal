@@ -69,7 +69,7 @@ svg.web-bg {
   position:relative; overflow:hidden;
 }
 .heros-code-card::after {
-  content:''; position:absolute; bottom:-10px; right:16px;
+  content:'🕷'; position:absolute; bottom:-10px; right:16px;
   font-size:110px; opacity:0.05; line-height:1;
 }
 .badge {
@@ -152,6 +152,8 @@ svg.web-bg {
   text-align:center; font-family:'JetBrains Mono',monospace; letter-spacing:0.04em;
 }
 .choice-card:hover,.choice-card.active { border-color:var(--gold); color:var(--gold); background:rgba(201,168,76,0.07); }
+.repair-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:10px; }
+.repair-block label { display:block; font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.2em; color:var(--dim); margin-bottom:5px; }
 .save-btn {
   display:block; width:100%; margin-top:26px; padding:14px;
   background:linear-gradient(135deg,var(--deep-red),var(--red));
@@ -159,166 +161,178 @@ svg.web-bg {
   font-family:'Bebas Neue',sans-serif; font-size:17px; letter-spacing:0.2em;
   cursor:pointer; transition:opacity 0.2s,transform 0.1s;
 }
-.entry-card { background:var(--faint); border:1px solid var(--border); border-radius:3px; margin-bottom:12px; overflow:hidden; }
+.save-btn:hover { opacity:0.9; }
+.save-btn:active { transform:scale(0.99); }
+.toast { text-align:center; font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.2em; color:var(--gold); margin-top:10px; opacity:0; transition:opacity 0.4s; }
+.history-empty { text-align:center; padding:60px 20px; color:var(--dim); font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.2em; line-height:2; }
+.entry-card { background:var(--faint); border:1px solid var(--border); border-radius:3px; margin-bottom:12px; overflow:hidden; transition:border-color 0.2s; }
+.entry-card:hover { border-color:rgba(193,18,31,0.35); }
 .entry-header { display:flex; align-items:center; justify-content:space-between; padding:14px 16px; cursor:pointer; gap:10px; }
 .entry-date { font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.15em; color:var(--gold); }
+.entry-mood { font-size:11px; color:var(--dim); font-family:'JetBrains Mono',monospace; letter-spacing:0.08em; margin-top:2px; }
 .entry-weight-badge { font-family:'Bebas Neue',sans-serif; font-size:20px; color:var(--red); flex-shrink:0; }
+.entry-toggle { font-size:14px; color:var(--dim); flex-shrink:0; transition:transform 0.2s; }
+.entry-card.open .entry-toggle { transform:rotate(180deg); }
 .entry-body { display:none; padding:0 16px 16px; border-top:1px solid var(--border); }
 .entry-card.open .entry-body { display:block; }
-.delete-btn { margin-top:14px; font-family:'JetBrains Mono',monospace; font-size:11px; color:#ff4d4d; background:rgba(193,18,31,0.12); border:1px solid rgba(193,18,31,0.4); border-radius:3px; padding:8px 14px; cursor:pointer; width:100%; }
+.entry-section { margin-top:12px; }
+.entry-section-title { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.25em; color:var(--gold); margin-bottom:5px; }
+.entry-text { font-size:14px; line-height:1.7; color:rgba(245,240,232,0.75); }
+.entry-threads { display:flex; flex-direction:column; gap:4px; }
+.entry-thread-item { font-size:13px; color:rgba(245,240,232,0.7); padding-left:14px; position:relative; }
+.entry-thread-item::before { content:'〰'; position:absolute; left:0; color:var(--dim); font-size:11px; }
+.entry-chips { display:flex; flex-wrap:wrap; gap:5px; }
+.entry-chip { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.08em; padding:3px 8px; border-radius:12px; border:1px solid rgba(201,168,76,0.3); color:var(--gold); }
+.delete-btn {
+  margin-top:14px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;
+  letter-spacing:0.15em;
+  color:#ff4d4d;
+  background:rgba(193,18,31,0.12);
+  border:1px solid rgba(193,18,31,0.4);
+  border-radius:3px;
+  padding:8px 14px;
+  cursor:pointer;
+  width:100%;
+  transition:all 0.2s;
+  text-shadow:0 0 8px rgba(193,18,31,0.6);
+  box-shadow:0 0 8px rgba(193,18,31,0.15);
+}
+.delete-btn:hover, .delete-btn:active {
+  background:rgba(193,18,31,0.25);
+  border-color:var(--red);
+  color:#ff6b6b;
+  box-shadow:0 0 16px rgba(193,18,31,0.4);
+  text-shadow:0 0 12px rgba(255,77,77,0.9);
+}
+.progress-section { margin-bottom:32px; }
+.progress-title { font-family:'Bebas Neue',sans-serif; font-size:19px; letter-spacing:0.08em; color:var(--silk); margin-bottom:12px; }
+.chart-wrap { background:var(--faint); border:1px solid var(--border); border-radius:3px; padding:18px 14px; }
+.chart-bars { display:flex; align-items:flex-end; gap:5px; height:100px; }
+.chart-bar-col { display:flex; flex-direction:column; align-items:center; flex:1; min-width:0; max-width:60px; }
+.chart-bar-val { font-family:'JetBrains Mono',monospace; font-size:8px; color:var(--dim); margin-bottom:3px; }
+.chart-bar { width:100%; border-radius:2px 2px 0 0; background:linear-gradient(to top,var(--deep-red),var(--red)); min-height:4px; }
+.chart-bar-empty { width:100%; border-radius:2px 2px 0 0; background:rgba(245,240,232,0.06); min-height:4px; height:4px; }
+.chart-bar-label { font-family:'JetBrains Mono',monospace; font-size:8px; color:var(--dim); margin-top:4px; text-align:center; white-space:nowrap; overflow:hidden; max-width:100%; text-overflow:ellipsis; }
+.integrity-summary { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.integrity-item { background:var(--faint); border:1px solid var(--border); border-radius:3px; padding:11px 13px; }
+.integrity-count { font-family:'Bebas Neue',sans-serif; font-size:24px; color:var(--gold); }
+.integrity-name { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.1em; color:var(--dim); margin-top:2px; }
+.mood-summary-grid { display:flex; flex-wrap:wrap; gap:8px; }
+.mood-summary-item { background:var(--faint); border:1px solid var(--border); border-radius:3px; padding:10px 13px; text-align:center; }
+.mood-summary-count { font-family:'Bebas Neue',sans-serif; font-size:22px; color:var(--red); }
+.mood-summary-label { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.08em; color:var(--dim); margin-top:2px; }
+.closing { margin-top:36px; text-align:center; padding:22px; border:1px solid rgba(201,168,76,0.2); background:rgba(123,13,30,0.15); border-radius:3px; }
+.closing-quote { font-size:16px; font-style:italic; color:rgba(245,240,232,0.75); line-height:1.7; margin-bottom:10px; }
+.closing-attr { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.25em; color:var(--gold); opacity:0.6; }
+/* ── EDIT MODAL ── */
+.modal-overlay {
+  display:none; position:fixed; inset:0; z-index:200;
+  background:rgba(0,0,0,0.85); backdrop-filter:blur(4px);
+  align-items:flex-start; justify-content:center;
+  padding:20px 16px; overflow-y:auto;
+}
+.modal-overlay.open { display:flex; }
+.modal {
+  background:#111; border:1px solid var(--gold);
+  border-radius:4px; width:100%; max-width:700px;
+  margin:auto; padding:24px 20px 32px;
+  position:relative; z-index:201;
+}
+.modal-title {
+  font-family:'Bebas Neue',sans-serif; font-size:22px;
+  letter-spacing:0.08em; color:var(--gold); margin-bottom:4px;
+}
+.modal-date {
+  font-family:'JetBrains Mono',monospace; font-size:10px;
+  letter-spacing:0.2em; color:var(--dim); margin-bottom:20px;
+}
+.modal-close {
+  position:absolute; top:16px; right:16px;
+  background:none; border:none; color:var(--dim);
+  font-size:20px; cursor:pointer; transition:color 0.2s;
+}
+.modal-close:hover { color:var(--silk); }
+.modal-section { margin-bottom:16px; }
+.modal-label {
+  font-family:'JetBrains Mono',monospace; font-size:9px;
+  letter-spacing:0.25em; color:var(--gold); margin-bottom:6px;
+}
+.modal .thread-input, .modal .write-area {
+  margin-bottom:6px;
+}
+.modal-mood-row { display:flex; flex-wrap:wrap; gap:7px; margin-bottom:4px; }
+.modal-save-btn {
+  display:block; width:100%; margin-top:20px; padding:13px;
+  background:linear-gradient(135deg,var(--deep-red),var(--red));
+  border:none; border-radius:3px; color:var(--silk);
+  font-family:'Bebas Neue',sans-serif; font-size:16px;
+  letter-spacing:0.2em; cursor:pointer; transition:opacity 0.2s;
+}
+.modal-save-btn:hover { opacity:0.9; }
+.modal .choice-grid { margin-bottom:10px; }
+
+/* ── FILTER TABS (History) ── */
+.filter-tabs {
+  display:flex; gap:6px; margin-bottom:20px; flex-wrap:wrap;
+}
+.filter-tab {
+  font-family:'JetBrains Mono',monospace; font-size:10px;
+  letter-spacing:0.12em; padding:6px 14px; border-radius:2px;
+  border:1px solid var(--border); color:var(--dim);
+  cursor:pointer; transition:all 0.2s; background:none;
+}
+.filter-tab:hover { color:var(--silk); border-color:rgba(245,240,232,0.3); }
+.filter-tab.active { color:var(--gold); border-color:var(--gold); background:rgba(201,168,76,0.08); }
+
+/* ── PERIOD SELECTOR ── */
+.period-select {
+  display:none; margin-bottom:16px;
+}
+.period-select.visible { display:block; }
+.period-select select {
+  background:var(--faint); border:1px solid var(--border);
+  border-radius:3px; color:var(--silk);
+  font-family:'JetBrains Mono',monospace; font-size:11px;
+  padding:8px 12px; outline:none; width:100%;
+  letter-spacing:0.1em; cursor:pointer;
+}
+.period-select select option { background:#1a1a1a; color:var(--silk); }
+
+/* ── ENTRY ACTION BUTTONS ── */
+.entry-actions { display:flex; gap:8px; margin-top:14px; }
+.edit-btn {
+  flex:1; font-family:'JetBrains Mono',monospace;
+  font-size:11px; letter-spacing:0.15em; color:#4da6ff;
+  background:rgba(77,166,255,0.08); border:1px solid rgba(77,166,255,0.35);
+  border-radius:3px; padding:8px 14px; cursor:pointer;
+  transition:all 0.2s;
+  text-shadow:0 0 8px rgba(77,166,255,0.5);
+  box-shadow:0 0 8px rgba(77,166,255,0.1);
+}
+.edit-btn:hover, .edit-btn:active {
+  background:rgba(77,166,255,0.18); border-color:#4da6ff;
+  box-shadow:0 0 14px rgba(77,166,255,0.35);
+}
 
 @media(max-width:520px){
   .heros-code-card { padding:24px 16px; }
-  .choice-grid { grid-template-columns:1fr; }
+  .choice-grid,.repair-row { grid-template-columns:1fr; }
 }
 </style>
 </head>
 <body>
 
+<div style="
+  position:fixed;
+  bottom:-60px;
+  right:-60px;
+  width:520px;
+  height:520px;
+  z-index:0;
+  pointer-events:none;
+  background-image:url('data:image/png;base64,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"></div>
+
 <nav class="nav">
-  <div class="nav-brand">RESPONSIBILITY JOURNAL</div>
-  <div class="nav-tab active" onclick="showPage('today', this)">Anchor</div>
-  <div class="nav-tab" onclick="showPage('history', this)">The Web</div>
-</nav>
-
-<div class="container">
-  <div id="today" class="page active">
-    <div class="heros-code-card">
-      <div class="badge">MISSION PROTOCOL</div>
-      <h1>THE HERO'S <span>CODE</span></h1>
-      <div class="subtitle">AUTHENTICITY • IMPACT • REPAIR</div>
-      <div class="divider"></div>
-      <p class="heros-code-text">"With great power comes <strong>Great Responsibility</strong>. Every choice is a thread in the web of your legacy."</p>
-      <div class="signature">— COMMANDER</div>
-    </div>
-
-    <div class="stats-row">
-      <div class="stat-card"><div class="stat-val" id="stat-streak">0</div><div class="stat-label">STREAK</div></div>
-      <div class="stat-card"><div class="stat-val" id="stat-impact">0</div><div class="stat-label">IMPACT</div></div>
-      <div class="stat-card"><div class="stat-val" id="stat-integrity">100%</div><div class="stat-label">INTEGRITY</div></div>
-    </div>
-
-    <div class="section-hdr">DAILY <span>ANCHOR</span></div>
-    
-    <div class="mood-row">
-        <div class="mood-pill" onclick="setMood(this)">⚡ Charged</div>
-        <div class="mood-pill" onclick="setMood(this)">🛡️ Disciplined</div>
-        <div class="mood-pill" onclick="setMood(this)">🌑 Heavy</div>
-        <div class="mood-pill active" onclick="setMood(this)">⚖️ Neutral</div>
-    </div>
-
-    <div class="pillar">
-      <div class="pillar-title">IMPACT</div>
-      <textarea id="impact-note" class="write-area" placeholder="What threads did you move today?"></textarea>
-      <div class="weight-wrap">
-        <div class="weight-label">ACTION WEIGHT: <span id="weight-display">50%</span></div>
-        <input type="range" class="weight-bar" id="weight-slider" min="0" max="100" value="50" oninput="document.getElementById('weight-display').innerText=this.value+'%'">
-      </div>
-    </div>
-
-    <div class="pillar">
-      <div class="pillar-title">INTEGRITY</div>
-      <div class="choice-grid">
-        <div class="choice-card active" onclick="setIntegrity(this)">MAINTAINED</div>
-        <div class="choice-card" onclick="setIntegrity(this)">REPAIRED</div>
-      </div>
-    </div>
-
-    <button class="save-btn" onclick="saveEntry()">ANCHOR TO THE WEB</button>
-  </div>
-
-  <div id="history" class="page">
-    <div class="section-hdr">THE <span>WEB</span></div>
-    <div id="history-list"></div>
-  </div>
-</div>
-
-<script>
-// THE ONLY CHANGE: Correct key for your data
-const STORAGE_KEY = 'falcon_journal_entries';
-
-let entries = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-
-function showPage(pageId, el) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-    document.getElementById(pageId).classList.add('active');
-    el.classList.add('active');
-    if(pageId === 'history') renderHistory();
-    updateStats();
-}
-
-function setMood(el) {
-    document.querySelectorAll('.mood-pill').forEach(p => p.classList.remove('active'));
-    el.classList.add('active');
-}
-
-function setIntegrity(el) {
-    document.querySelectorAll('.choice-card').forEach(p => p.classList.remove('active'));
-    el.classList.add('active');
-}
-
-function saveEntry() {
-    const note = document.getElementById('impact-note').value;
-    const mood = document.querySelector('.mood-pill.active')?.innerText || 'Neutral';
-    const integrity = document.querySelector('.choice-card.active')?.innerText || 'Maintained';
-    const weight = document.getElementById('weight-slider').value;
-
-    if(!note) { alert("The web requires impact."); return; }
-
-    const entry = {
-        id: Date.now(),
-        date: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
-        impact: note,
-        mood: mood,
-        integrity: integrity,
-        weight: weight
-    };
-
-    entries.unshift(entry);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
-    alert("Entry Anchored.");
-    location.reload();
-}
-
-function renderHistory() {
-    const list = document.getElementById('history-list');
-    if(entries.length === 0) {
-        list.innerHTML = '<div style="text-align:center; padding:50px; color:gray;">No threads found.</div>';
-        return;
-    }
-    list.innerHTML = entries.map(e => `
-        <div class="entry-card open">
-            <div class="entry-header">
-                <span class="entry-date">${e.date}</span>
-                <span class="entry-weight-badge">${e.weight || 0}%</span>
-            </div>
-            <div class="entry-body">
-                <div style="font-size:12px; color:var(--gold); margin-bottom:5px;">${e.mood} • ${e.integrity}</div>
-                <div style="line-height:1.6;">${e.impact}</div>
-                <button class="delete-btn" onclick="deleteEntry(${e.id})">CUT THREAD</button>
-            </div>
-        </div>
-    `).join('');
-}
-
-function deleteEntry(id) {
-    if(confirm("Cut thread?")) {
-        entries = entries.filter(e => e.id !== id);
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
-        renderHistory();
-        updateStats();
-    }
-}
-
-function updateStats() {
-    document.getElementById('stat-streak').innerText = entries.length;
-    document.getElementById('stat-impact').innerText = entries.length;
-}
-
-updateStats();
-</script>
-
-</body>
-      </html>
-  
+  <div clas
