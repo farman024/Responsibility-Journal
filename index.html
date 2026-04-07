@@ -3,7 +3,12 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="theme-color" content="#C1121F"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Web Journal"/>
 <title>Responsibility Journal — The Web of Impact</title>
+<link rel="manifest" href="/manifest.json"/>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
 <style>
 :root {
@@ -221,6 +226,96 @@ svg.web-bg {
 .closing { margin-top:36px; text-align:center; padding:22px; border:1px solid rgba(201,168,76,0.2); background:rgba(123,13,30,0.15); border-radius:3px; }
 .closing-quote { font-size:16px; font-style:italic; color:rgba(245,240,232,0.75); line-height:1.7; margin-bottom:10px; }
 .closing-attr { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.25em; color:var(--gold); opacity:0.6; }
+/* ── EDIT MODAL ── */
+.modal-overlay {
+  display:none; position:fixed; inset:0; z-index:200;
+  background:rgba(0,0,0,0.85); backdrop-filter:blur(4px);
+  align-items:flex-start; justify-content:center;
+  padding:20px 16px; overflow-y:auto;
+}
+.modal-overlay.open { display:flex; }
+.modal {
+  background:#111; border:1px solid var(--gold);
+  border-radius:4px; width:100%; max-width:700px;
+  margin:auto; padding:24px 20px 32px;
+  position:relative; z-index:201;
+}
+.modal-title {
+  font-family:'Bebas Neue',sans-serif; font-size:22px;
+  letter-spacing:0.08em; color:var(--gold); margin-bottom:4px;
+}
+.modal-date {
+  font-family:'JetBrains Mono',monospace; font-size:10px;
+  letter-spacing:0.2em; color:var(--dim); margin-bottom:20px;
+}
+.modal-close {
+  position:absolute; top:16px; right:16px;
+  background:none; border:none; color:var(--dim);
+  font-size:20px; cursor:pointer; transition:color 0.2s;
+}
+.modal-close:hover { color:var(--silk); }
+.modal-section { margin-bottom:16px; }
+.modal-label {
+  font-family:'JetBrains Mono',monospace; font-size:9px;
+  letter-spacing:0.25em; color:var(--gold); margin-bottom:6px;
+}
+.modal .thread-input, .modal .write-area {
+  margin-bottom:6px;
+}
+.modal-mood-row { display:flex; flex-wrap:wrap; gap:7px; margin-bottom:4px; }
+.modal-save-btn {
+  display:block; width:100%; margin-top:20px; padding:13px;
+  background:linear-gradient(135deg,var(--deep-red),var(--red));
+  border:none; border-radius:3px; color:var(--silk);
+  font-family:'Bebas Neue',sans-serif; font-size:16px;
+  letter-spacing:0.2em; cursor:pointer; transition:opacity 0.2s;
+}
+.modal-save-btn:hover { opacity:0.9; }
+.modal .choice-grid { margin-bottom:10px; }
+
+/* ── FILTER TABS (History) ── */
+.filter-tabs {
+  display:flex; gap:6px; margin-bottom:20px; flex-wrap:wrap;
+}
+.filter-tab {
+  font-family:'JetBrains Mono',monospace; font-size:10px;
+  letter-spacing:0.12em; padding:6px 14px; border-radius:2px;
+  border:1px solid var(--border); color:var(--dim);
+  cursor:pointer; transition:all 0.2s; background:none;
+}
+.filter-tab:hover { color:var(--silk); border-color:rgba(245,240,232,0.3); }
+.filter-tab.active { color:var(--gold); border-color:var(--gold); background:rgba(201,168,76,0.08); }
+
+/* ── PERIOD SELECTOR ── */
+.period-select {
+  display:none; margin-bottom:16px;
+}
+.period-select.visible { display:block; }
+.period-select select {
+  background:var(--faint); border:1px solid var(--border);
+  border-radius:3px; color:var(--silk);
+  font-family:'JetBrains Mono',monospace; font-size:11px;
+  padding:8px 12px; outline:none; width:100%;
+  letter-spacing:0.1em; cursor:pointer;
+}
+.period-select select option { background:#1a1a1a; color:var(--silk); }
+
+/* ── ENTRY ACTION BUTTONS ── */
+.entry-actions { display:flex; gap:8px; margin-top:14px; }
+.edit-btn {
+  flex:1; font-family:'JetBrains Mono',monospace;
+  font-size:11px; letter-spacing:0.15em; color:#4da6ff;
+  background:rgba(77,166,255,0.08); border:1px solid rgba(77,166,255,0.35);
+  border-radius:3px; padding:8px 14px; cursor:pointer;
+  transition:all 0.2s;
+  text-shadow:0 0 8px rgba(77,166,255,0.5);
+  box-shadow:0 0 8px rgba(77,166,255,0.1);
+}
+.edit-btn:hover, .edit-btn:active {
+  background:rgba(77,166,255,0.18); border-color:#4da6ff;
+  box-shadow:0 0 14px rgba(77,166,255,0.35);
+}
+
 @media(max-width:520px){
   .heros-code-card { padding:24px 16px; }
   .choice-grid,.repair-row { grid-template-columns:1fr; }
@@ -345,11 +440,93 @@ svg.web-bg {
 </div>
 </div>
 
+<!-- EDIT MODAL -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeEditModal()">✕</button>
+    <div class="modal-title">✏️ Edit Entry</div>
+    <div class="modal-date" id="editModalDate">—</div>
+
+    <div class="modal-section">
+      <div class="modal-label">Suit Condition</div>
+      <div class="modal-mood-row" id="editMoodRow">
+        <div class="mood-pill" onclick="selectMood(this)">⚡ Charged</div>
+        <div class="mood-pill" onclick="selectMood(this)">🕸 Steady</div>
+        <div class="mood-pill" onclick="selectMood(this)">🌧 Heavy</div>
+        <div class="mood-pill" onclick="selectMood(this)">🔥 Under Pressure</div>
+        <div class="mood-pill" onclick="selectMood(this)">🤍 Quiet & Resolved</div>
+      </div>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-label">🕸 Structural Threads</div>
+      <input class="thread-input" id="et1" placeholder="Responsibility #1" style="width:100%;margin-bottom:6px;"/>
+      <input class="thread-input" id="et2" placeholder="Responsibility #2" style="width:100%;margin-bottom:6px;"/>
+      <input class="thread-input" id="et3" placeholder="Responsibility #3" style="width:100%;margin-bottom:6px;"/>
+      <input class="thread-input" id="et4" placeholder="Responsibility #4" style="width:100%;"/>
+      <div class="weight-wrap" style="margin-top:10px;">
+        <div class="weight-label">Web Weight: 1 = light · 10 = carrying the city</div>
+        <input type="range" min="1" max="10" value="5" class="weight-bar" id="editWeightBar" oninput="document.getElementById('editWeightVal').textContent='Weight: '+this.value+' / 10'"/>
+        <div class="weight-label" id="editWeightVal" style="text-align:right;margin-top:4px;color:var(--gold);">Weight: 5 / 10</div>
+      </div>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-label">🤝 The Web-Line</div>
+      <textarea class="write-area" id="editWebLine" placeholder="Who did I help today?" style="min-height:70px;"></textarea>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-label">🛡 Integrity Check</div>
+      <div class="choice-grid" id="editIntegrityGrid">
+        <div class="choice-card" onclick="toggleCard(this)">✅ Stayed silent when provoked</div>
+        <div class="choice-card" onclick="toggleCard(this)">✅ Helped without recognition</div>
+        <div class="choice-card" onclick="toggleCard(this)">✅ Chose discipline over impulse</div>
+        <div class="choice-card" onclick="toggleCard(this)">✅ Protected someone quietly</div>
+        <div class="choice-card" onclick="toggleCard(this)">⚠ Reacted from ego</div>
+        <div class="choice-card" onclick="toggleCard(this)">⚠ Sought external validation</div>
+        <div class="choice-card" onclick="toggleCard(this)">⚠ Avoided a hard moment</div>
+        <div class="choice-card" onclick="toggleCard(this)">⚠ Let someone's doubt affect me</div>
+      </div>
+      <textarea class="write-area" id="editIntegrityNote" placeholder="Key integrity moment..." style="min-height:60px;"></textarea>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-label">🔧 Suit Repairs</div>
+      <div class="repair-row">
+        <div class="repair-block"><label>🩹 DAMAGE</label><textarea class="write-area" id="editDamage" style="min-height:70px;" placeholder="What hurt?"></textarea></div>
+        <div class="repair-block"><label>🔧 REPAIR</label><textarea class="write-area" id="editRepair" style="min-height:70px;" placeholder="How recovering?"></textarea></div>
+      </div>
+      <textarea class="write-area" id="editTomorrow" style="min-height:60px;" placeholder="One intention for tomorrow..."></textarea>
+    </div>
+
+    <button class="modal-save-btn" onclick="saveEdit()">✅ SAVE CHANGES</button>
+  </div>
+</div>
+
 <!-- HISTORY -->
 <div class="page" id="page-history">
 <div class="container">
   <div class="section-hdr">Past <span>Entries</span></div>
   <div class="date-line">Your web, entry by entry.</div>
+
+  <div class="filter-tabs">
+    <button class="filter-tab active" onclick="setFilter('all',this)">All</button>
+    <button class="filter-tab" onclick="setFilter('month',this)">By Month</button>
+    <button class="filter-tab" onclick="setFilter('year',this)">By Year</button>
+  </div>
+
+  <div class="period-select" id="monthSelect">
+    <select id="monthPicker" onchange="renderHistory()">
+      <option value="">— Select Month —</option>
+    </select>
+  </div>
+  <div class="period-select" id="yearSelect">
+    <select id="yearPicker" onchange="renderHistory()">
+      <option value="">— Select Year —</option>
+    </select>
+  </div>
+
   <div id="historyList"></div>
 </div>
 </div>
@@ -403,6 +580,9 @@ document.getElementById('dateDisplay').textContent =
 // ── STORAGE KEY ──
 const STORAGE_KEY = 'falcon_journal_entries';
 
+// ── CURRENT FILTER STATE ──
+let currentFilter = 'all'; // 'all' | 'month' | 'year'
+
 // ── LOAD / SAVE / DELETE ──
 function loadAll() {
   try {
@@ -418,10 +598,8 @@ function persistAll(entries) {
 
 function saveData(entry) {
   const entries = loadAll();
-  // Remove existing entry for same date (overwrite)
   const idx = entries.findIndex(e => e.date === entry.date);
   if (idx !== -1) entries.splice(idx, 1);
-  // Add new entry at the front
   entries.unshift(entry);
   persistAll(entries);
 }
@@ -433,7 +611,8 @@ function deleteData(date) {
 
 // ── UI HELPERS ──
 function selectMood(el) {
-  document.querySelectorAll('.mood-pill').forEach(p => p.classList.remove('active'));
+  // Only deselect siblings in same container
+  el.closest('.modal-mood-row, .mood-row').querySelectorAll('.mood-pill').forEach(p => p.classList.remove('active'));
   el.classList.add('active');
 }
 function toggleCard(el) { el.classList.toggle('active'); }
@@ -446,7 +625,7 @@ function switchTab(tab) {
   document.getElementById('page-' + tab).classList.add('active');
   const tabs = ['journal','history','progress','code'];
   document.querySelectorAll('.nav-tab')[tabs.indexOf(tab)].classList.add('active');
-  if (tab === 'history') renderHistory();
+  if (tab === 'history') { populatePeriodSelectors(); renderHistory(); }
   if (tab === 'progress') renderProgress();
 }
 
@@ -471,22 +650,17 @@ function updateStats() {
 
 // ── CLEAR FORM ──
 function clearForm() {
-  // Clear thread inputs
   ['t1','t2','t3','t4'].forEach(id => document.getElementById(id).value = '');
-  // Clear textareas
   ['webLine','integrityNote','damage','repair','tomorrow'].forEach(id => document.getElementById(id).value = '');
-  // Reset weight slider
   document.getElementById('weightBar').value = 5;
   document.getElementById('weightVal').textContent = 'Weight: 5 / 10';
-  // Deselect mood pills
   document.querySelectorAll('.mood-pill').forEach(p => p.classList.remove('active'));
-  // Deselect integrity cards
   document.querySelectorAll('#integrityGrid .choice-card').forEach(c => c.classList.remove('active'));
 }
 
-// ── SAVE ENTRY (FIXED) ──
+// ── SAVE ENTRY ──
 function saveEntry() {
-  const mood = document.querySelector('.mood-pill.active')?.textContent || '';
+  const mood = document.querySelector('#moodRow .mood-pill.active')?.textContent || '';
   const threads = ['t1','t2','t3','t4'].map(id => document.getElementById(id).value).filter(Boolean);
   const weight = parseInt(document.getElementById('weightBar').value);
   const webLine = document.getElementById('webLine').value;
@@ -497,22 +671,13 @@ function saveEntry() {
   const tomorrow = document.getElementById('tomorrow').value;
 
   const entry = { date: dateKey, mood, threads, weight, webLine, integrityCards, integrityNote, damage, repair, tomorrow };
-
-  // 1. Add to entries array at front + persist to localStorage
   saveData(entry);
-
-  // 2. Refresh stats immediately
   updateStats();
-
-  // 3. Clear the form so Today tab feels fresh
   clearForm();
 
-  // 4. Show toast
   const t = document.getElementById('toast');
   t.style.opacity = '1';
   setTimeout(() => { t.style.opacity = '0'; }, 3000);
-
-  // 5. Auto-switch to History tab after 1 second so user sees their entry
   setTimeout(() => { switchTab('history'); }, 1000);
 }
 
@@ -522,14 +687,81 @@ function formatDate(str) {
   return d.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric'}).toUpperCase();
 }
 
+// ── FILTER LOGIC ──
+function setFilter(filter, btn) {
+  currentFilter = filter;
+  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('monthSelect').classList.toggle('visible', filter === 'month');
+  document.getElementById('yearSelect').classList.toggle('visible', filter === 'year');
+  renderHistory();
+}
+
+function populatePeriodSelectors() {
+  const entries = loadAll();
+  const months = new Set();
+  const years = new Set();
+
+  entries.forEach(e => {
+    const d = new Date(e.date + 'T00:00:00');
+    const monthKey = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+    const monthLabel = d.toLocaleDateString('en-GB',{month:'long',year:'numeric'});
+    months.add(JSON.stringify({ key: monthKey, label: monthLabel }));
+    years.add(d.getFullYear());
+  });
+
+  const monthPicker = document.getElementById('monthPicker');
+  const yearPicker = document.getElementById('yearPicker');
+  const currentMonthVal = monthPicker.value;
+  const currentYearVal = yearPicker.value;
+
+  monthPicker.innerHTML = '<option value="">— Select Month —</option>';
+  [...months].map(m => JSON.parse(m)).sort((a,b) => b.key.localeCompare(a.key)).forEach(m => {
+    const opt = document.createElement('option');
+    opt.value = m.key; opt.textContent = m.label;
+    if (m.key === currentMonthVal) opt.selected = true;
+    monthPicker.appendChild(opt);
+  });
+
+  yearPicker.innerHTML = '<option value="">— Select Year —</option>';
+  [...years].sort((a,b) => b-a).forEach(y => {
+    const opt = document.createElement('option');
+    opt.value = y; opt.textContent = y;
+    if (String(y) === currentYearVal) opt.selected = true;
+    yearPicker.appendChild(opt);
+  });
+}
+
+function getFilteredEntries() {
+  const entries = loadAll();
+  if (currentFilter === 'month') {
+    const val = document.getElementById('monthPicker').value;
+    if (!val) return entries;
+    return entries.filter(e => e.date.startsWith(val));
+  }
+  if (currentFilter === 'year') {
+    const val = document.getElementById('yearPicker').value;
+    if (!val) return entries;
+    return entries.filter(e => e.date.startsWith(val));
+  }
+  return entries;
+}
+
 // ── RENDER HISTORY ──
 function renderHistory() {
-  const entries = loadAll();
+  const entries = getFilteredEntries();
   const el = document.getElementById('historyList');
+
   if (!entries.length) {
-    el.innerHTML = '<div class="history-empty">🕸 No entries yet.<br/>Seal your first web today.</div>';
+    const msg = currentFilter === 'month' && document.getElementById('monthPicker').value
+      ? '🕸 No entries for this month yet.'
+      : currentFilter === 'year' && document.getElementById('yearPicker').value
+      ? '🕸 No entries for this year yet.'
+      : '🕸 No entries yet.<br/>Seal your first web today.';
+    el.innerHTML = `<div class="history-empty">${msg}</div>`;
     return;
   }
+
   el.innerHTML = entries.map(e => `
     <div class="entry-card" id="card-${e.date}">
       <div class="entry-header" onclick="toggleEntry('${e.date}')">
@@ -545,26 +777,134 @@ function renderHistory() {
         ${e.damage?`<div class="entry-section"><div class="entry-section-title">🩹 DAMAGE</div><div class="entry-text">${e.damage}</div></div>`:''}
         ${e.repair?`<div class="entry-section"><div class="entry-section-title">🔧 REPAIR</div><div class="entry-text">${e.repair}</div></div>`:''}
         ${e.tomorrow?`<div class="entry-section"><div class="entry-section-title">TOMORROW</div><div class="entry-text">${e.tomorrow}</div></div>`:''}
-        <button class="delete-btn" data-date="${e.date}" onclick="handleDelete(this)">✕ DELETE THIS ENTRY</button>
+        <div class="entry-actions">
+          <button class="edit-btn" data-date="${e.date}" onclick="openEditModal(this)">✏️ EDIT</button>
+          <button class="delete-btn" data-date="${e.date}" onclick="handleDelete(this)">✕ DELETE</button>
+        </div>
       </div>
     </div>`).join('');
 }
 
 function toggleEntry(date) { document.getElementById('card-' + date)?.classList.toggle('open'); }
 
-function deleteEntry(date) {
-  if (!confirm('Delete this entry?')) return;
+function handleDelete(btn) {
+  const date = btn.getAttribute('data-date');
+  if (!date) return;
+  if (!confirm('Delete this entry? This cannot be undone.')) return;
   deleteData(date);
   updateStats();
+  populatePeriodSelectors();
   renderHistory();
+  if (date === dateKey) clearForm();
 }
+
+// ── EDIT MODAL ──
+let editingDate = null;
+
+function openEditModal(btn) {
+  const date = btn.getAttribute('data-date');
+  if (!date) return;
+  const entries = loadAll();
+  const entry = entries.find(e => e.date === date);
+  if (!entry) return;
+
+  editingDate = date;
+
+  // Set date label
+  document.getElementById('editModalDate').textContent = formatDate(date);
+
+  // Fill mood
+  document.querySelectorAll('#editMoodRow .mood-pill').forEach(p => {
+    p.classList.toggle('active', p.textContent === entry.mood);
+  });
+
+  // Fill threads
+  ['et1','et2','et3','et4'].forEach((id,i) => {
+    document.getElementById(id).value = entry.threads?.[i] || '';
+  });
+
+  // Fill weight
+  const w = entry.weight || 5;
+  document.getElementById('editWeightBar').value = w;
+  document.getElementById('editWeightVal').textContent = `Weight: ${w} / 10`;
+
+  // Fill webLine
+  document.getElementById('editWebLine').value = entry.webLine || '';
+
+  // Fill integrity cards
+  document.querySelectorAll('#editIntegrityGrid .choice-card').forEach(c => {
+    c.classList.toggle('active', (entry.integrityCards||[]).includes(c.textContent));
+  });
+  document.getElementById('editIntegrityNote').value = entry.integrityNote || '';
+
+  // Fill repairs
+  document.getElementById('editDamage').value = entry.damage || '';
+  document.getElementById('editRepair').value = entry.repair || '';
+  document.getElementById('editTomorrow').value = entry.tomorrow || '';
+
+  // Open modal
+  document.getElementById('editModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeEditModal() {
+  document.getElementById('editModal').classList.remove('open');
+  document.body.style.overflow = '';
+  editingDate = null;
+}
+
+function saveEdit() {
+  if (!editingDate) return;
+
+  const mood = document.querySelector('#editMoodRow .mood-pill.active')?.textContent || '';
+  const threads = ['et1','et2','et3','et4'].map(id => document.getElementById(id).value).filter(Boolean);
+  const weight = parseInt(document.getElementById('editWeightBar').value);
+  const webLine = document.getElementById('editWebLine').value;
+  const integrityCards = [...document.querySelectorAll('#editIntegrityGrid .choice-card.active')].map(c => c.textContent);
+  const integrityNote = document.getElementById('editIntegrityNote').value;
+  const damage = document.getElementById('editDamage').value;
+  const repair = document.getElementById('editRepair').value;
+  const tomorrow = document.getElementById('editTomorrow').value;
+
+  const entry = { date: editingDate, mood, threads, weight, webLine, integrityCards, integrityNote, damage, repair, tomorrow };
+  saveData(entry);
+  updateStats();
+  closeEditModal();
+  renderHistory();
+
+  // If edited today's entry, also refresh the form fields
+  if (editingDate === dateKey) {
+    ['t1','t2','t3','t4'].forEach((id,i) => { document.getElementById(id).value = threads[i] || ''; });
+    ['webLine','integrityNote','damage','repair','tomorrow'].forEach(id => {
+      document.getElementById(id).value = entry[id] || '';
+    });
+    document.getElementById('weightBar').value = weight;
+    document.getElementById('weightVal').textContent = `Weight: ${weight} / 10`;
+    document.querySelectorAll('#moodRow .mood-pill').forEach(p => {
+      p.classList.toggle('active', p.textContent === mood);
+    });
+    document.querySelectorAll('#integrityGrid .choice-card').forEach(c => {
+      c.classList.toggle('active', integrityCards.includes(c.textContent));
+    });
+  }
+
+  // Show toast
+  const t = document.getElementById('toast');
+  t.textContent = '✦ Entry updated. The web remembers. ✦';
+  t.style.opacity = '1';
+  setTimeout(() => { t.style.opacity = '0'; t.textContent = '✦ Entry archived. The web holds. ✦'; }, 3000);
+}
+
+// Close modal on overlay click
+document.getElementById('editModal').addEventListener('click', function(e) {
+  if (e.target === this) closeEditModal();
+});
 
 // ── RENDER PROGRESS ──
 function renderProgress() {
   const entries = loadAll();
   const chartEl = document.getElementById('weightChart');
 
-  // Build a map of date -> weight for the last 7 days
   const last7Days = [];
   for (let i = 6; i >= 0; i--) {
     const d = new Date();
@@ -576,7 +916,6 @@ function renderProgress() {
   }
 
   const max = Math.max(...last7Days.filter(d => d.weight !== null).map(d => d.weight), 1);
-
   chartEl.innerHTML = last7Days.map(d => {
     if (d.weight === null) {
       return `<div class="chart-bar-col">
@@ -591,6 +930,7 @@ function renderProgress() {
       <div class="chart-bar-label">${d.label}</div>
     </div>`;
   }).join('');
+
   const cardCounts = {};
   entries.forEach(e => (e.integrityCards||[]).forEach(c => { cardCounts[c] = (cardCounts[c]||0) + 1; }));
   const sorted = Object.entries(cardCounts).sort((a,b) => b[1]-a[1]).slice(0,6);
@@ -598,6 +938,7 @@ function renderProgress() {
   intEl.innerHTML = sorted.length
     ? sorted.map(([name,count]) => `<div class="integrity-item"><div class="integrity-count">${count}</div><div class="integrity-name">${name}</div></div>`).join('')
     : '<div style="color:var(--dim);font-family:JetBrains Mono,monospace;font-size:10px;letter-spacing:0.15em;grid-column:1/-1;padding:10px 0">No integrity data yet.</div>';
+
   const moodCounts = {};
   entries.forEach(e => { if (e.mood) moodCounts[e.mood] = (moodCounts[e.mood]||0) + 1; });
   const moodEl = document.getElementById('moodSummary');
@@ -607,20 +948,54 @@ function renderProgress() {
     : '<div style="color:var(--dim);font-family:JetBrains Mono,monospace;font-size:10px;letter-spacing:0.15em;padding:10px 0">No mood data yet.</div>';
 }
 
-// ── HANDLE DELETE (mobile-safe) ──
-function handleDelete(btn) {
-  const date = btn.getAttribute('data-date');
-  if (!date) return;
-  if (!confirm('Delete this entry? This cannot be undone.')) return;
-  deleteData(date);
-  updateStats();
-  renderHistory();
-  // If deleted entry was today's — clear the form too
-  if (date === dateKey) clearForm();
-}
-
 // ── INIT ──
 updateStats();
+
+// ── PWA: Register Service Worker ──
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
+  });
+}
+
+// ── SPIDER-SENSE: 8PM Daily Reminder ──
+function requestNotificationPermission() {
+  if ('Notification' in window && Notification.permission === 'default') {
+    Notification.requestPermission();
+  }
+}
+
+function checkSpiderSense() {
+  const todayKey = new Date().toISOString().split('T')[0];
+  const entries = JSON.parse(localStorage.getItem('falcon_journal_entries') || '[]');
+  const hasToday = entries.some(e => e.date === todayKey);
+  if (!hasToday && Notification.permission === 'granted') {
+    new Notification('🕷 Spider-Sense Activated', {
+      body: 'Log your discipline, Commander. The web is waiting.',
+      icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23C1121F'/><text y='.9em' font-size='75' x='12'>🕷</text></svg>",
+      badge: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23C1121F'/><text y='.9em' font-size='75' x='12'>🕷</text></svg>",
+      tag: 'spider-sense',
+      renotify: false
+    });
+  }
+}
+
+function scheduleSpiderSense() {
+  const now = new Date();
+  const target = new Date();
+  target.setHours(20, 0, 0, 0); // 8:00 PM
+  // If 8PM already passed today, schedule for tomorrow
+  if (now >= target) target.setDate(target.getDate() + 1);
+  const msUntil = target - now;
+  setTimeout(() => {
+    checkSpiderSense();
+    // Repeat every 24 hours from then
+    setInterval(checkSpiderSense, 24 * 60 * 60 * 1000);
+  }, msUntil);
+}
+
+requestNotificationPermission();
+scheduleSpiderSense();
 </script>
 </body>
 </html>
