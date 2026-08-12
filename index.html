@@ -21,7 +21,7 @@
   --dim: rgba(245,240,232,0.4);
   --faint: rgba(245,240,232,0.05);
   --border: rgba(245,240,232,0.1);
-  --web-overlay: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><defs><path id="w" d="M0 0 L100 200 L200 0 "/></defs><rect width="200" height="200" fill="none"><fill rule="evenodd"><use href="#w" fill="rgba(193,18,31,0.03)"/></fill rule></rect></svg>');
+  --web-overlay: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='210' height='210' viewBox='0 0 210 210'><g fill='none' stroke='%23C1121F' stroke-width='1'><circle cx='105' cy='105' r='24' stroke-opacity='0.5'/><circle cx='105' cy='105' r='52' stroke-opacity='0.35'/><circle cx='105' cy='105' r='88' stroke-opacity='0.22'/><circle cx='105' cy='105' r='146' stroke-opacity='0.12'/><path d='M105 0v210M0 105h210M105 0 0 105M105 0l105 105M105 210 0 105 105 0M105 210l105-105' stroke-opacity='0.25'/></g></svg>");
   --web-accent: rgba(193,18,31,0.35);
 }
 * { margin:0; padding:0; box-sizing:border-box; }
@@ -129,9 +129,8 @@ svg.web-bg {
 .stat-card {
   background:var(--faint); border:1px solid var(--web-accent);
   border-radius:3px; padding:14px 12px; text-align:center;
-  position:relative;
+  position:relative; overflow:hidden;
 }
-.stat-card::after { content:''; position:absolute; top:0; right:0; bottom:0; left:0; border-radius:3px; padding:1px; background:var(--web-overlay); mask-type:luminance; -webkit-mask-type:luminance; mask:var(--web-overlay); }
 .stat-val { font-family:'Bebas Neue',sans-serif; font-size:30px; color:var(--red); line-height:1; }
 .stat-label { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.18em; color:var(--dim); margin-top:3px; }
 .section-hdr { font-family:'Bebas Neue',sans-serif; font-size:clamp(22px,5vw,34px); letter-spacing:0.08em; color:var(--silk); margin-bottom:4px; }

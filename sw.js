@@ -1,4 +1,4 @@
-const CACHE_NAME = 'rj-v1';
+const CACHE_NAME = 'rj-v2';
 const ASSETS = [
   './',
   './index.html',
@@ -26,6 +26,19 @@ self.addEventListener('activate', (e) => {
 self.addEventListener('fetch', (e) => {
   const url = new URL(e.request.url);
   if (url.origin !== location.origin) return;
+
+  if (e.request.mode === 'navigate') {
+    e.respondWith(
+      fetch(e.request)
+        .then((response) => {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put('./index.html', clone));
+          return response;
+        })
+        .catch(() => caches.match('./index.html'))
+    );
+    return;
+  }
 
   e.respondWith(
     caches.match(e.request).then((cached) => {
