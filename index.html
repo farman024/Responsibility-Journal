@@ -416,6 +416,17 @@ svg.web-bg {
 }
 .undo-btn:hover { background:rgba(201,168,76,0.12); }
 
+/* ── SYNC STATUS ── */
+.sync-status {
+  margin-top:14px; padding:11px 14px; border-radius:3px;
+  font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.1em;
+  border:1px solid var(--border); color:var(--dim); min-height:22px;
+  transition:border-color 0.3s, color 0.3s, background 0.3s;
+}
+.sync-status.ok { color:#7fd49a; border-color:rgba(127,212,154,0.4); background:rgba(127,212,154,0.07); }
+.sync-status.err { color:#ff6b6b; border-color:rgba(255,107,107,0.4); background:rgba(255,107,107,0.07); }
+.sync-status.sync { color:var(--gold); border-color:rgba(201,168,76,0.4); background:rgba(201,168,76,0.07); }
+
 @media(max-width:520px){
   .heros-code-card { padding:24px 16px; }
   .choice-grid,.repair-row { grid-template-columns:1fr; }
@@ -1318,10 +1329,10 @@ if (!localStorage.getItem(ONBOARD_KEY)) {
   openOnboarding();
 }
 
-// ── PWA: Service Worker cleanup ──
+// ── PWA: Service Worker registration ──
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.getRegistrations().then((regs) => { regs.forEach((r) => r.unregister()); });
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
   });
 }
 

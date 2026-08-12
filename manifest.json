@@ -2,12 +2,12 @@
   "name": "Responsibility Journal — The Web of Impact",
   "short_name": "Web Journal",
   "description": "Daily reflective journaling. Four pillars. One hero.",
-  "start_url": "/",
+  "start_url": ".",
   "display": "standalone",
   "background_color": "#0D0D0D",
   "theme_color": "#C1121F",
   "orientation": "portrait",
   "icons": [
-    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
   ]
 }
