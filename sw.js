@@ -1,11 +1,10 @@
-const CACHE_NAME = 'rj-v3';
+const CACHE_NAME = 'rj-v4';
 const ASSETS = [
   './',
   './index.html',
   './manifest.json',
   './icon.svg',
-  './spider-mask.png',
-  './spider-symbol.png'
+  './spider-mask.png'
 ];
 
 self.addEventListener('install', (e) => {
