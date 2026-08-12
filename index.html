@@ -347,6 +347,75 @@ svg.web-bg {
   box-shadow:0 0 14px rgba(201,168,76,0.35);
 }
 
+/* ── TODAY BANNER ── */
+.today-banner {
+  display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+  background:rgba(201,168,76,0.07); border:1px solid rgba(201,168,76,0.3);
+  border-radius:3px; padding:10px 14px; margin-bottom:22px;
+  font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.1em; color:var(--gold);
+}
+.today-banner .tb-actions { margin-left:auto; display:flex; gap:8px; }
+.tb-btn {
+  background:none; border:1px solid var(--border); color:var(--dim);
+  border-radius:3px; padding:6px 11px; font-family:'JetBrains Mono',monospace;
+  font-size:9px; letter-spacing:0.12em; cursor:pointer; transition:all 0.2s;
+  display:inline-flex; align-items:center; gap:6px;
+}
+.tb-btn:hover { color:var(--silk); border-color:rgba(245,240,232,0.3); }
+.tb-btn.primary { color:var(--gold); border-color:rgba(201,168,76,0.4); }
+.tb-btn.primary:hover { background:rgba(201,168,76,0.12); color:var(--gold); }
+
+/* ── ONBOARDING ── */
+.onboard-overlay {
+  display:none; position:fixed; inset:0; z-index:400;
+  background:rgba(0,0,0,0.92); backdrop-filter:blur(6px);
+  align-items:center; justify-content:center; padding:20px 16px; overflow-y:auto;
+}
+.onboard-overlay.open { display:flex; }
+.onboard-card {
+  background:#111; border:1px solid var(--gold); border-radius:4px;
+  width:100%; max-width:520px; padding:28px 26px 24px;
+  position:relative; box-shadow:0 0 40px rgba(193,18,31,0.25);
+}
+.onboard-kicker { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.3em; color:var(--red); margin-bottom:8px; }
+.onboard-title { font-family:'Bebas Neue',sans-serif; font-size:26px; letter-spacing:0.06em; color:var(--gold); margin-bottom:12px; line-height:1.05; }
+.onboard-body { font-size:14px; line-height:1.75; color:rgba(245,240,232,0.85); margin-bottom:18px; }
+.onboard-pillars { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:18px; }
+.onboard-pillar { background:var(--faint); border:1px solid var(--border); border-radius:3px; padding:10px 12px; }
+.onboard-pillar .op-title { font-family:'Bebas Neue',sans-serif; font-size:14px; color:var(--red); letter-spacing:0.05em; margin-bottom:3px; }
+.onboard-pillar .op-desc { font-size:11px; color:var(--dim); line-height:1.5; font-style:italic; }
+.onboard-dots { display:flex; gap:6px; justify-content:center; margin-top:14px; }
+.onboard-dot { width:7px; height:7px; border-radius:50%; background:var(--border); transition:all 0.2s; }
+.onboard-dot.active { background:var(--red); box-shadow:0 0 8px rgba(193,18,31,0.6); }
+.onboard-actions { display:flex; justify-content:space-between; align-items:center; margin-top:18px; gap:10px; }
+.onboard-skip { background:none; border:none; color:var(--dim); font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.15em; cursor:pointer; padding:8px 6px; }
+.onboard-skip:hover { color:var(--silk); }
+.onboard-next {
+  background:linear-gradient(135deg,var(--deep-red),var(--red));
+  border:none; border-radius:3px; color:var(--silk);
+  font-family:'Bebas Neue',sans-serif; font-size:15px; letter-spacing:0.2em;
+  padding:11px 22px; cursor:pointer; transition:opacity 0.2s, transform 0.2s;
+}
+.onboard-next:hover { opacity:0.92; transform:translateY(-1px); }
+
+/* ── UNDO TOAST ── */
+.undo-toast {
+  position:fixed; bottom:18px; left:50%; transform:translateX(-50%) translateY(20px);
+  z-index:300; display:flex; align-items:center; gap:14px;
+  background:#171717; border:1px solid rgba(201,168,76,0.4);
+  border-radius:3px; padding:11px 16px; opacity:0; pointer-events:none;
+  transition:opacity 0.3s, transform 0.3s;
+  font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.12em; color:var(--silk);
+  box-shadow:0 8px 30px rgba(0,0,0,0.5);
+}
+.undo-toast.show { opacity:1; transform:translateX(-50%) translateY(0); pointer-events:auto; }
+.undo-btn {
+  background:none; border:1px solid var(--gold); color:var(--gold);
+  border-radius:3px; padding:6px 14px; font-family:'JetBrains Mono',monospace;
+  font-size:10px; letter-spacing:0.15em; cursor:pointer; transition:all 0.2s;
+}
+.undo-btn:hover { background:rgba(201,168,76,0.12); }
+
 @media(max-width:520px){
   .heros-code-card { padding:24px 16px; }
   .choice-grid,.repair-row { grid-template-columns:1fr; }
@@ -360,6 +429,14 @@ svg.web-bg {
   .container { padding:24px 14px 60px; }
   .pillar { padding-left:12px; }
   .modal { padding:20px 14px 26px; }
+  .thread-input { padding:12px 12px; font-size:15px; }
+  .write-area { padding:14px 14px; min-height:100px; }
+  .mood-pill { padding:9px 14px; font-size:11px; }
+  .choice-card { padding:12px 11px; font-size:11px; }
+  .save-btn { padding:16px; font-size:16px; }
+  .tb-btn { padding:9px 13px; font-size:10px; }
+  .onboard-pillars { grid-template-columns:1fr; }
+  .onboard-pillar .op-desc { font-size:12px; }
 }
 @media(min-width:521px) and (max-width:720px){
   .stats-row { grid-template-columns:repeat(3,1fr); }
@@ -389,6 +466,24 @@ svg.web-bg {
   <symbol id="ico-star" viewBox="0 0 24 24"><path d="M12 2c.5 5.7 2.3 7.5 8 8-5.7.5-7.5 2.3-8 8-.5-5.7-2.3-7.5-8-8 5.7-.5 7.5-2.3 8-8z" fill="currentColor"/></symbol>
   <symbol id="ico-wave" viewBox="0 0 24 24"><path d="M3 8c2.5 4 4.5 4 7 0s4.5-4 7 0 4.5 4 7 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M3 15c2.5 4 4.5 4 7 0s4.5-4 7 0 4.5 4 7 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
 </svg>
+
+<!-- ONBOARDING -->
+<div class="onboard-overlay" id="onboardOverlay">
+  <div class="onboard-card">
+    <div class="onboard-kicker" id="onboardKicker">THE WEB OF IMPACT</div>
+    <div class="onboard-title" id="onboardTitle">Welcome</div>
+    <div class="onboard-body" id="onboardBody"></div>
+    <div class="onboard-pillars" id="onboardPillars" style="display:none;"></div>
+    <div class="onboard-dots" id="onboardDots"></div>
+    <div class="onboard-actions">
+      <button class="onboard-skip" onclick="skipOnboarding()">SKIP</button>
+      <button class="onboard-next" id="onboardNext" onclick="nextOnboarding()">BEGIN</button>
+    </div>
+  </div>
+</div>
+
+<!-- UNDO TOAST -->
+<div class="undo-toast" id="undoToast"><span><svg class="ico"><use href="#ico-x"/></svg> Entry deleted</span><button class="undo-btn" onclick="undoDelete()">UNDO</button></div>
 
 <div style="
   position:fixed;
@@ -441,6 +536,13 @@ svg.web-bg {
     <div class="stat-card"><div class="stat-val" id="streakVal">0</div><div class="stat-label"><svg class="ico"><use href="#ico-fire"/></svg> Streak</div></div>
     <div class="stat-card"><div class="stat-val" id="totalVal">0</div><div class="stat-label"><svg class="ico"><use href="#ico-web"/></svg> Entries</div></div>
     <div class="stat-card"><div class="stat-val" id="avgWeightVal">—</div><div class="stat-label"><svg class="ico"><use href="#ico-scale"/></svg> Avg Load</div></div>
+  </div>
+  <div class="today-banner" id="todayBanner" style="display:none;">
+    <span><svg class="ico"><use href="#ico-web"/></svg> Today's entry is sealed.</span>
+    <div class="tb-actions">
+      <button class="tb-btn primary" onclick="loadTodayIntoForm()"><svg class="ico"><use href="#ico-pen"/></svg> EDIT</button>
+      <button class="tb-btn" onclick="startFresh()">START FRESH</button>
+    </div>
   </div>
   <div style="margin-bottom:22px;">
     <div class="pillar-label">Suit Condition on Entry</div>
@@ -686,6 +788,183 @@ function cleanMood(m) {
   return String(m||'').replace(/^[^\p{L}\p{N}]+/u,'').trim();
 }
 
+// ── ONBOARDING ──
+const ONBOARD_KEY = 'rj_onboarded';
+const onboardingSteps = [
+  {
+    kicker: 'THE WEB OF IMPACT',
+    title: 'One daily entry. One stronger hero.',
+    body: 'This journal is your daily accountability web. Every day you record what you carried, who you helped, where your mask held — and what needs repair. Five minutes a day. No fluff.'
+  },
+  {
+    kicker: 'THE FOUR PILLARS',
+    title: 'Built on four pillars',
+    pillars: [
+      { t:'I · STRUCTURAL THREADS', d:'What you carried. The responsibilities on your web today.' },
+      { t:'II · THE WEB-LINE', d:'Who you helped — with no one watching.' },
+      { t:'III · THE INTEGRITY CHECK', d:'Where the mask stayed on… and where it slipped.' },
+      { t:'IV · SUIT REPAIRS', d:'Damage taken, repairs in progress, tomorrow\'s re-entry.' }
+    ]
+  },
+  {
+    kicker: 'THE RITUAL',
+    title: 'Seal the web daily',
+    body: 'Pick your condition, set the weight (1 = light, 10 = carrying the city), fill what matters, and hit SEAL TODAY\'S WEB. Your 8PM Spider-Sense reminder will keep you honest.'
+  }
+];
+let onboardStep = 0;
+
+function openOnboarding() {
+  onboardStep = 0;
+  document.getElementById('onboardOverlay').classList.add('open');
+  renderOnboardStep();
+}
+function closeOnboarding() {
+  document.getElementById('onboardOverlay').classList.remove('open');
+  localStorage.setItem(ONBOARD_KEY, '1');
+  refreshTodayBanner();
+}
+function skipOnboarding() { closeOnboarding(); }
+function nextOnboarding() {
+  onboardStep++;
+  if (onboardStep >= onboardingSteps.length) { closeOnboarding(); return; }
+  renderOnboardStep();
+}
+function renderOnboardStep() {
+  const s = onboardingSteps[onboardStep];
+  document.getElementById('onboardKicker').textContent = s.kicker;
+  document.getElementById('onboardTitle').textContent = s.title;
+  const body = document.getElementById('onboardBody');
+  const pillars = document.getElementById('onboardPillars');
+  if (s.pillars) {
+    body.style.display = 'none';
+    pillars.style.display = 'grid';
+    pillars.innerHTML = s.pillars.map(p => `<div class="onboard-pillar"><div class="op-title">${p.t}</div><div class="op-desc">${p.d}</div></div>`).join('');
+  } else {
+    body.style.display = 'block';
+    body.textContent = s.body;
+    pillars.style.display = 'none';
+  }
+  document.getElementById('onboardDots').innerHTML = onboardingSteps.map((_,i) => `<div class="onboard-dot${i===onboardStep?' active':''}"></div>`).join('');
+  document.getElementById('onboardNext').textContent = onboardStep === onboardingSteps.length - 1 ? 'START' : 'NEXT';
+}
+
+// ── TODAY BANNER / INLINE EDIT ──
+let editingToday = false;
+function refreshTodayBanner() {
+  const banner = document.getElementById('todayBanner');
+  const exists = loadAll().some(e => e.date === dateKey);
+  banner.style.display = exists ? 'flex' : 'none';
+}
+function fillTodayForm(entry) {
+  ['t1','t2','t3','t4'].forEach((id,i) => { document.getElementById(id).value = entry.threads?.[i] || ''; });
+  ['webLine','integrityNote','damage','repair','tomorrow'].forEach(id => { document.getElementById(id).value = entry[id] || ''; });
+  document.getElementById('weightBar').value = entry.weight || 5;
+  document.getElementById('weightVal').textContent = `Weight: ${entry.weight||5} / 10`;
+  document.querySelectorAll('#moodRow .mood-pill').forEach(p => {
+    p.classList.toggle('active', p.textContent.trim() === cleanMood(entry.mood));
+  });
+  document.querySelectorAll('#integrityGrid .choice-card').forEach(c => {
+    c.classList.toggle('active', (entry.integrityCards||[]).map(cleanMood).includes(c.textContent.trim()));
+  });
+  editingToday = true;
+  document.querySelector('.save-btn').innerHTML = '<svg class="ico"><use href="#ico-wrench"/></svg> UPDATE TODAY\'S WEB';
+}
+function loadTodayIntoForm() {
+  const entry = loadAll().find(e => e.date === dateKey);
+  if (!entry) return;
+  fillTodayForm(entry);
+  document.getElementById('page-journal').scrollIntoView({ behavior:'smooth' });
+}
+function startFresh() {
+  clearForm();
+  editingToday = false;
+  localStorage.removeItem(DRAFT_KEY);
+  document.querySelector('.save-btn').innerHTML = '<svg class="ico"><use href="#ico-web"/></svg> SEAL TODAY\'S WEB';
+}
+function resetSaveBtn() {
+  editingToday = false;
+  document.querySelector('.save-btn').innerHTML = '<svg class="ico"><use href="#ico-web"/></svg> SEAL TODAY\'S WEB';
+}
+
+// ── AUTOSAVE DRAFT ──
+const DRAFT_KEY = 'rj_draft';
+let draftTimer = null;
+function saveDraft() {
+  clearTimeout(draftTimer);
+  draftTimer = setTimeout(() => {
+    const draft = {
+      mood: document.querySelector('#moodRow .mood-pill.active')?.textContent.trim() || '',
+      threads: ['t1','t2','t3','t4'].map(id => document.getElementById(id).value),
+      weight: document.getElementById('weightBar').value,
+      webLine: document.getElementById('webLine').value,
+      integrityCards: [...document.querySelectorAll('#integrityGrid .choice-card.active')].map(c => c.textContent.trim()),
+      integrityNote: document.getElementById('integrityNote').value,
+      damage: document.getElementById('damage').value,
+      repair: document.getElementById('repair').value,
+      tomorrow: document.getElementById('tomorrow').value
+    };
+    localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+  }, 700);
+}
+function restoreDraft() {
+  try {
+    const raw = localStorage.getItem(DRAFT_KEY);
+    if (!raw) return false;
+    const d = JSON.parse(raw);
+    const empty = !['t1','t2','t3','t4'].some(id => document.getElementById(id).value) &&
+      !['webLine','integrityNote','damage','repair','tomorrow'].some(id => document.getElementById(id).value);
+    if (!empty) return false;
+    if (d.threads) ['t1','t2','t3','t4'].forEach((id,i) => { document.getElementById(id).value = d.threads[i] || ''; });
+    if (d.webLine) document.getElementById('webLine').value = d.webLine;
+    if (d.integrityNote) document.getElementById('integrityNote').value = d.integrityNote;
+    if (d.damage) document.getElementById('damage').value = d.damage;
+    if (d.repair) document.getElementById('repair').value = d.repair;
+    if (d.tomorrow) document.getElementById('tomorrow').value = d.tomorrow;
+    if (d.weight) { document.getElementById('weightBar').value = d.weight; document.getElementById('weightVal').textContent = `Weight: ${d.weight} / 10`; }
+    if (d.mood) document.querySelectorAll('#moodRow .mood-pill').forEach(p => p.classList.toggle('active', p.textContent.trim() === d.mood));
+    if (d.integrityCards?.length) document.querySelectorAll('#integrityGrid .choice-card').forEach(c => c.classList.toggle('active', d.integrityCards.includes(c.textContent.trim())));
+    return true;
+  } catch(e) { return false; }
+}
+function bindAutosave() {
+  ['t1','t2','t3','t4','webLine','integrityNote','damage','repair','tomorrow','weightBar'].forEach(id => {
+    document.getElementById(id).addEventListener('input', saveDraft);
+  });
+  document.querySelectorAll('#moodRow .mood-pill, #integrityGrid .choice-card').forEach(el => {
+    el.addEventListener('click', saveDraft);
+  });
+}
+
+// ── UNDO DELETE ──
+let pendingUndo = null;
+let undoTimer = null;
+function showUndoToast() {
+  const t = document.getElementById('undoToast');
+  t.classList.add('show');
+  clearTimeout(undoTimer);
+  undoTimer = setTimeout(hideUndoToast, 8000);
+}
+function hideUndoToast() { document.getElementById('undoToast').classList.remove('show'); }
+function undoDelete() {
+  if (!pendingUndo) return;
+  saveData(pendingUndo);
+  pendingUndo = null;
+  hideUndoToast();
+  updateStats();
+  populatePeriodSelectors();
+  renderHistory();
+  refreshTodayBanner();
+}
+
+// ── SHORTCUTS ──
+document.addEventListener('keydown', (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+    if (document.getElementById('editModal').classList.contains('open')) saveEdit();
+    else if (document.getElementById('page-journal').classList.contains('active')) saveEntry();
+  }
+});
+
 // ── TAB SWITCHING ──
 function switchTab(tab) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -742,6 +1021,9 @@ function saveEntry() {
   saveData(entry);
   updateStats();
   clearForm();
+  resetSaveBtn();
+  localStorage.removeItem(DRAFT_KEY);
+  refreshTodayBanner();
 
   const t = document.getElementById('toast');
   t.style.opacity = '1';
@@ -858,12 +1140,15 @@ function toggleEntry(date) { document.getElementById('card-' + date)?.classList.
 function handleDelete(btn) {
   const date = btn.getAttribute('data-date');
   if (!date) return;
-  if (!confirm('Delete this entry? This cannot be undone.')) return;
+  const entry = loadAll().find(e => e.date === date);
+  if (!entry) return;
   deleteData(date);
+  pendingUndo = entry;
   updateStats();
   populatePeriodSelectors();
   renderHistory();
-  if (date === dateKey) clearForm();
+  if (date === dateKey) { clearForm(); resetSaveBtn(); refreshTodayBanner(); }
+  showUndoToast();
 }
 
 // ── EDIT MODAL ──
@@ -1019,6 +1304,19 @@ function renderProgress() {
 
 // ── INIT ──
 updateStats();
+bindAutosave();
+refreshTodayBanner();
+
+if (restoreDraft()) {
+  const t = document.getElementById('toast');
+  t.innerHTML = '<svg class="ico"><use href="#ico-star"/></svg> Draft restored. <svg class="ico"><use href="#ico-star"/></svg>';
+  t.style.opacity = '1';
+  setTimeout(() => { t.style.opacity = '0'; t.innerHTML = '<svg class="ico"><use href="#ico-star"/></svg> Entry archived. The web holds. <svg class="ico"><use href="#ico-star"/></svg>'; }, 3000);
+}
+
+if (!localStorage.getItem(ONBOARD_KEY)) {
+  openOnboarding();
+}
 
 // ── PWA: Service Worker cleanup ──
 if ('serviceWorker' in navigator) {
