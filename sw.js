@@ -1,56 +1,60 @@
-const CACHE_NAME = 'rj-v5';
-const ASSETS = [
-  './',
-  './index.html',
-  './manifest.json',
-  './icon.svg',
-  './spider-mask.png',
-  './spider-emblem.svg'
-];
+const CACHE = 'woi-v3-2026';
+const CORE = ['./', 'index.html', 'manifest.json', 'mask-icon.svg'];
+const FONT_HOSTS = ['fonts.googleapis.com', 'fonts.gstatic.com'];
 
-self.addEventListener('install', (e) => {
-  e.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
-  );
-  self.skipWaiting();
+self.addEventListener('install', e => {
+  e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).then(() => self.skipWaiting()));
 });
 
-self.addEventListener('activate', (e) => {
-  e.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)))
-    )
-  );
-  self.clients.claim();
+self.addEventListener('activate', e => {
+  e.waitUntil((async () => {
+    const keys = await caches.keys();
+    await Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)));
+    await self.clients.claim();
+  })());
 });
 
-self.addEventListener('fetch', (e) => {
+self.addEventListener('fetch', e => {
   const url = new URL(e.request.url);
-  if (url.origin !== location.origin) return;
 
+  // Navigations: network-first, fall back to cached shell (offline mode)
   if (e.request.mode === 'navigate') {
-    e.respondWith(
-      fetch(e.request)
-        .then((response) => {
-          const clone = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put('./index.html', clone));
-          return response;
-        })
-        .catch(() => caches.match('./index.html'))
-    );
+    e.respondWith((async () => {
+      try {
+        const net = await fetch(e.request);
+        const c = await caches.open(CACHE);
+        c.put('./', net.clone());
+        return net;
+      } catch {
+        const c = await caches.open(CACHE);
+        return (await c.match('./')) || (await c.match('index.html')) || Response.error();
+      }
+    })());
     return;
   }
 
-  e.respondWith(
-    caches.match(e.request).then((cached) => {
-      const fetchPromise = fetch(e.request).then((response) => {
-        if (response.ok) {
-          const clone = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(e.request, clone));
-        }
-        return response;
-      }).catch(() => cached);
-      return cached || fetchPromise;
-    })
-  );
+  // Fonts: cache-first (works offline after first visit)
+  if (FONT_HOSTS.includes(url.hostname)) {
+    e.respondWith((async () => {
+      const c = await caches.open(CACHE);
+      const hit = await c.match(e.request);
+      if (hit) return hit;
+      try {
+        const net = await fetch(e.request);
+        if (net.ok || net.type === 'opaque') c.put(e.request, net.clone());
+        return net;
+      } catch { return Response.error(); }
+    })());
+    return;
+  }
+
+  // Same-origin assets: stale-while-revalidate
+  if (url.origin === self.location.origin) {
+    e.respondWith((async () => {
+      const c = await caches.open(CACHE);
+      const hit = await c.match(e.request);
+      fetch(e.request).then(net => { if (net.ok) c.put(e.request, net.clone()); }).catch(() => {});
+      return hit || fetch(e.request);
+    })());
+  }
 });
