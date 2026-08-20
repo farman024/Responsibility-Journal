@@ -292,6 +292,31 @@ svg.web-bg {
 .mood-summary-item { background:var(--faint); border:1px solid var(--border); border-radius:3px; padding:10px 13px; text-align:center; }
 .mood-summary-count { font-family:'Bebas Neue',sans-serif; font-size:22px; color:var(--red); }
 .mood-summary-label { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.08em; color:var(--dim); margin-top:2px; }
+
+/* ── PHASE 3 ANALYTICS ── */
+.weekly-summary { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+.weekly-item { background:var(--faint); border:1px solid var(--border); border-radius:3px; padding:12px 10px; text-align:center; }
+.weekly-item .wi-val { font-family:'Bebas Neue',sans-serif; font-size:22px; color:var(--gold); }
+.weekly-item .wi-label { font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.1em; color:var(--dim); margin-top:3px; }
+.heatmap { display:grid; grid-auto-flow:column; grid-template-rows:repeat(7,12px); gap:3px; overflow-x:auto; padding-bottom:6px; }
+.heatmap-cell { width:12px; height:12px; border-radius:2px; background:rgba(245,240,232,0.06); }
+.heatmap-cell.future { background:transparent; }
+.heatmap-cell.w1 { background:rgba(193,18,31,0.3); }
+.heatmap-cell.w2 { background:rgba(193,18,31,0.55); }
+.heatmap-cell.w3 { background:rgba(193,18,31,0.8); }
+.heatmap-cell.w4 { background:var(--red); box-shadow:0 0 6px rgba(193,18,31,0.5); }
+.trend-chart { width:100%; height:140px; }
+.integrity-ratio { display:flex; align-items:center; gap:16px; padding:6px 2px; }
+.ir-bar { flex:1; height:10px; background:var(--faint); border-radius:5px; overflow:hidden; display:flex; }
+.ir-wins { background:rgba(127,212,154,0.7); height:100%; }
+.ir-losses { background:rgba(255,107,107,0.7); height:100%; }
+.ir-text { font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--silk); white-space:nowrap; }
+.mood-weight { display:grid; grid-template-columns:repeat(auto-fill,minmax(110px,1fr)); gap:8px; }
+.mw-item { background:var(--faint); border:1px solid var(--border); border-radius:3px; padding:10px; text-align:center; }
+.mw-item .mw-mood { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--silk); }
+.mw-item .mw-avg { font-family:'Bebas Neue',sans-serif; font-size:20px; color:var(--red); }
+.mw-item .mw-count { font-family:'JetBrains Mono',monospace; font-size:8px; color:var(--dim); margin-top:2px; }
+
 .closing { margin-top:36px; text-align:center; padding:22px; border:1px solid rgba(201,168,76,0.2); background:rgba(123,13,30,0.15); border-radius:3px; }
 .closing-quote { font-size:16px; font-style:italic; color:rgba(245,240,232,0.75); line-height:1.7; margin-bottom:10px; }
 .closing-attr { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.25em; color:var(--gold); opacity:0.6; }
@@ -514,6 +539,7 @@ svg.web-bg {
   <symbol id="ico-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
   <symbol id="ico-star" viewBox="0 0 24 24"><path d="M12 2c.5 5.7 2.3 7.5 8 8-5.7.5-7.5 2.3-8 8-.5-5.7-2.3-7.5-8-8 5.7-.5 7.5-2.3 8-8z" fill="currentColor"/></symbol>
   <symbol id="ico-wave" viewBox="0 0 24 24"><path d="M3 8c2.5 4 4.5 4 7 0s4.5-4 7 0 4.5 4 7 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M3 15c2.5 4 4.5 4 7 0s4.5-4 7 0 4.5 4 7 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="ico-trend" viewBox="0 0 24 24"><path d="M3 18c5-12 10 4 18-8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
 
 <!-- ONBOARDING -->
@@ -757,12 +783,32 @@ svg.web-bg {
     <div class="chart-wrap"><div class="chart-bars" id="weightChart"></div></div>
   </div>
   <div class="progress-section">
+    <div class="progress-title"><svg class="ico"><use href="#ico-fire"/></svg> This Week</div>
+    <div class="weekly-summary" id="weeklySummary"></div>
+  </div>
+  <div class="progress-section">
+    <div class="progress-title"><svg class="ico"><use href="#ico-web"/></svg> Year Heatmap</div>
+    <div class="heatmap" id="yearHeatmap"></div>
+  </div>
+  <div class="progress-section">
+    <div class="progress-title"><svg class="ico"><use href="#ico-trend"/></svg> Weight Trend — Last 30 Days</div>
+    <svg class="trend-chart" id="weightTrend" viewBox="0 0 600 160" preserveAspectRatio="none"></svg>
+  </div>
+  <div class="progress-section">
     <div class="progress-title"><svg class="ico"><use href="#ico-shield"/></svg> Integrity Patterns</div>
     <div class="integrity-summary" id="integritySummary"></div>
   </div>
   <div class="progress-section">
+    <div class="progress-title"><svg class="ico"><use href="#ico-star"/></svg> Integrity Ratio</div>
+    <div class="integrity-ratio" id="integrityRatio"></div>
+  </div>
+  <div class="progress-section">
     <div class="progress-title"><svg class="ico"><use href="#ico-bolt"/></svg> Mood Frequency</div>
     <div class="chart-wrap"><div class="mood-summary-grid" id="moodSummary"></div></div>
+  </div>
+  <div class="progress-section">
+    <div class="progress-title"><svg class="ico"><use href="#ico-scale"/></svg> Mood vs Weight</div>
+    <div class="mood-weight" id="moodWeight"></div>
   </div>
   <div class="closing">
     <div class="closing-quote">"I'm not the hero because I have no choice.<br/>I'm the hero because <em>I always choose to be.</em>"</div>
@@ -1351,6 +1397,107 @@ function renderProgress() {
   const moodSorted = Object.entries(moodCounts).sort((a,b) => b[1]-a[1]);
   moodEl.innerHTML = moodSorted.length
     ? moodSorted.map(([mood,count]) => `<div class="mood-summary-item"><div class="mood-summary-count">${count}</div><div class="mood-summary-label">${cleanMood(mood)}</div></div>`).join('')
+    : '<div style="color:var(--dim);font-family:JetBrains Mono,monospace;font-size:10px;letter-spacing:0.15em;padding:10px 0">No mood data yet.</div>';
+
+  renderWeeklySummary(entries);
+  renderYearHeatmap(entries);
+  renderWeightTrend(entries);
+  renderIntegrityRatio(entries);
+  renderMoodWeight(entries);
+}
+
+// ── WEEKLY SUMMARY ──
+function renderWeeklySummary(entries) {
+  const el = document.getElementById('weeklySummary');
+  const now = new Date();
+  const weekStart = new Date(now); weekStart.setDate(now.getDate() - now.getDay()); weekStart.setHours(0,0,0,0);
+  const thisWeek = entries.filter(e => { const d = new Date(e.date + 'T00:00:00'); return d >= weekStart && d <= now && !isNaN(d); });
+  const count = thisWeek.length;
+  const avg = count ? (thisWeek.reduce((s,e) => s + Number(e.weight||0), 0) / count) : 0;
+  const moods = {}; let wins = 0;
+  thisWeek.forEach(e => {
+    const m = cleanMood(e.mood); if (m) moods[m] = (moods[m]||0) + 1;
+    if (e.weight <= 4) wins++;
+  });
+  const top = Object.entries(moods).sort((a,b) => b[1]-a[1])[0];
+  el.innerHTML = [
+    ['ENTRIES', count],
+    ['AVG LOAD', avg ? avg.toFixed(1) + '/10' : '—'],
+    ['TOP MOOD', top ? top[0] : '—'],
+    ['LIGHT DAYS', wins]
+  ].map(([l,v]) => `<div class="weekly-item"><div class="wi-val">${v}</div><div class="wi-label">${l}</div></div>`).join('');
+}
+
+// ── YEAR HEATMAP ──
+function renderYearHeatmap(entries) {
+  const el = document.getElementById('yearHeatmap');
+  const now = new Date();
+  const year = now.getUTCFullYear();
+  const entryMap = {};
+  entries.forEach(e => { entryMap[e.date] = Number(e.weight) || 0; });
+  const start = new Date(Date.UTC(year,0,1));
+  const end = new Date(Date.UTC(year,11,31));
+  const today = now.toISOString().split('T')[0];
+  let s = '';
+  for (let d = new Date(start.getTime()); d <= end; d.setUTCDate(d.getUTCDate()+1)) {
+    const key = d.toISOString().split('T')[0];
+    const w = entryMap[key] || 0;
+    const future = key > today;
+    const cls = future ? 'future' : w === 0 ? '' : w <= 3 ? 'w1' : w <= 5 ? 'w2' : w <= 7 ? 'w3' : 'w4';
+    s += `<div class="heatmap-cell ${cls}" title="${key}${w ? ' · ' + w + '/10' : ''}"></div>`;
+  }
+  el.innerHTML = s;
+}
+
+// ── WEIGHT TREND (30 DAYS) ──
+function renderWeightTrend(entries) {
+  const el = document.getElementById('weightTrend');
+  const byDate = {};
+  entries.forEach(e => { byDate[e.date] = Number(e.weight) || 0; });
+  const days = [];
+  for (let i = 29; i >= 0; i--) {
+    const d = new Date(); d.setDate(d.getDate() - i);
+    const key = d.toISOString().split('T')[0];
+    days.push({ w: byDate[key] || null });
+  }
+  const W = 600, H = 160, PAD = 20;
+  const pts = [];
+  days.forEach((d,i) => {
+    if (d.w !== null) pts.push({ x: PAD + (i * (W - PAD*2) / 29), y: H - PAD - ((d.w / 10) * (H - PAD*2)) });
+  });
+  if (!pts.length) { el.innerHTML = '<text x="300" y="80" text-anchor="middle" fill="var(--dim)" font-family="JetBrains Mono,monospace" font-size="10">No data yet.</text>'; return; }
+  const line = pts.map(p => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' L ');
+  const dots = pts.map(p => `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="3.5" fill="var(--gold)"/>`).join('');
+  el.innerHTML = `<polyline points="${line}" fill="none" stroke="var(--red)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>${dots}`;
+}
+
+// ── INTEGRITY RATIO ──
+function renderIntegrityRatio(entries) {
+  const el = document.getElementById('integrityRatio');
+  let wins = 0, losses = 0;
+  entries.forEach(e => (e.integrityCards||[]).forEach(c => {
+    const label = cleanMood(c);
+    if (/stayed|helped|discipline|protected/i.test(label)) wins++;
+    if (/ego|validation|avoided|doubt/i.test(label)) losses++;
+  }));
+  const total = wins + losses;
+  const winPct = total ? Math.round((wins / total) * 100) : 0;
+  el.innerHTML = `<div class="ir-bar"><div class="ir-wins" style="width:${winPct}%"></div><div class="ir-losses" style="width:${100-winPct}%"></div></div><div class="ir-text">${total ? winPct + '% wins' : 'No data'}</div>`;
+}
+
+// ── MOOD vs WEIGHT ──
+function renderMoodWeight(entries) {
+  const el = document.getElementById('moodWeight');
+  const agg = {};
+  entries.forEach(e => {
+    const m = cleanMood(e.mood); if (!m) return;
+    if (!agg[m]) agg[m] = { sum: 0, n: 0 };
+    agg[m].sum += Number(e.weight) || 0;
+    agg[m].n++;
+  });
+  const rows = Object.entries(agg).sort((a,b) => b[1].n - a[1].n);
+  el.innerHTML = rows.length
+    ? rows.map(([m,v]) => `<div class="mw-item"><div class="mw-avg">${(v.sum/v.n).toFixed(1)}</div><div class="mw-mood">${m}</div><div class="mw-count">${v.n} entry${v.n>1?'s':''}</div></div>`).join('')
     : '<div style="color:var(--dim);font-family:JetBrains Mono,monospace;font-size:10px;letter-spacing:0.15em;padding:10px 0">No mood data yet.</div>';
 }
 
