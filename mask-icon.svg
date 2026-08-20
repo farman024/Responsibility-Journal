@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#0A0E1A"/>
+  <g transform="translate(136,116) scale(2)">
+    <path fill="#A6151B" d="M60 4 C 90 4 112 28 112 64 C 112 102 90 136 60 136 C 30 136 8 102 8 64 C 8 28 30 4 60 4 Z"/>
+    <g stroke="#160608" stroke-width="1.2" fill="none" clip-path="circle(70px at 60px 62px)">
+      <line x1="60" y1="62" x2="60" y2="-18"/><line x1="60" y1="62" x2="100" y2="-7"/>
+      <line x1="60" y1="62" x2="129" y2="22"/><line x1="60" y1="62" x2="140" y2="62"/>
+      <line x1="60" y1="62" x2="129" y2="102"/><line x1="60" y1="62" x2="100" y2="131"/>
+      <line x1="60" y1="62" x2="60" y2="142"/><line x1="60" y1="62" x2="20" y2="131"/>
+      <line x1="60" y1="62" x2="-9" y2="102"/><line x1="60" y1="62" x2="-20" y2="62"/>
+      <line x1="60" y1="62" x2="-9" y2="22"/><line x1="60" y1="62" x2="20" y2="-7"/>
+      <circle cx="60" cy="62" r="14"/><circle cx="60" cy="62" r="26"/>
+      <circle cx="60" cy="62" r="40"/><circle cx="60" cy="62" r="56"/>
+    </g>
+    <path fill="#EDEFF4" stroke="#160608" stroke-width="3.5" d="M52 71 C 45 53 30 47 21 52 C 15 56 14 62 18 66 C 27 74 44 77 52 71 Z"/>
+    <path fill="#EDEFF4" stroke="#160608" stroke-width="3.5" d="M68 71 C 75 53 90 47 99 52 C 105 56 106 62 102 66 C 93 74 76 77 68 71 Z"/>
+  </g>
+</svg>
