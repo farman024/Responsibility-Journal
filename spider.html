@@ -614,8 +614,9 @@ I am the work. I am the heart. I carry on.
       <div class="set-row">
         <button id="exportBtn" class="btn ghost sm">EXPORT</button>
         <button id="importBtn" class="btn ghost sm">IMPORT</button>
+        <button id="legacyBtn" class="btn ghost sm">IMPORT LEGACY</button>
       </div>
-      <p class="hint dim" style="margin:10px 0 0">Entries live in localStorage. Export writes a vault file to disk; import merges non-destructively.</p>
+      <p class="hint dim" style="margin:10px 0 0">Entries live in localStorage. Export writes a vault file to disk; import merges non-destructively. <b>Import Legacy</b> recovers entries saved by the pre-redesign version of this journal.</p>
     </div>
     <div class="set-sec">
       <span class="set-label">SUIT</span>
@@ -1407,6 +1408,62 @@ $('#importFile').addEventListener('change',async ev=>{
     karenSpeak(`Vault restored. ${added} entries recovered.`);
   }catch(e){toast('Import failed: not a valid vault file.');SFX.del()}
 });
+
+/* ================= LEGACY VAULT IMPORT =================
+   Recovers entries from the pre-redesign version (localStorage key
+   'falcon_journal_entries') and maps them onto the current schema.
+   Non-destructive: never overwrites an existing date.   */
+const LEGACY_KEY='falcon_journal_entries';
+const LEGACY_MOOD_MAP={charged:'charged',steady:'steady',heavy:'heavy','under pressure':'pressure','quiet':'quiet','quiet and resolved':'quiet','resolved':'quiet'};
+function legacySuit(mood){
+  const m=String(mood||'').trim().toLowerCase();
+  for(const[k,v]of Object.entries(LEGACY_MOOD_MAP))if(m.includes(k))return v;
+  return 'steady';
+}
+function legacyIntegrity(cards){
+  const ids={on:{silent:'silent',help:'help',discipline:'discipline',protect:'protect'},
+             slip:{ego:'ego',validation:'validation',avoid:'avoid',doubt:'doubt'}};
+  const out={};
+  (cards||[]).forEach(card=>{
+    const c=String(card||'').trim().toLowerCase();
+    if(/silent/.test(c))out.silent=true;
+    else if(/help/.test(c))out.help=true;
+    else if(/discipl/.test(c))out.discipline=true;
+    else if(/protect/.test(c))out.protect=true;
+    else if(/ego/.test(c))out.ego=true;
+    else if(/valid/.test(c))out.validation=true;
+    else if(/avoid/.test(c))out.avoid=true;
+    else if(/doubt/.test(c))out.doubt=true;
+  });
+  return out;
+}
+$('#legacyBtn').onclick=()=>{
+  let legacy;
+  try{legacy=JSON.parse(localStorage.getItem(LEGACY_KEY)||'[]')}catch(e){legacy=[]}
+  if(!Array.isArray(legacy)||!legacy.length){toast('No pre-redesign entries found.');SFX.del();return}
+  let added=0,skipped=0;
+  legacy.forEach(o=>{
+    if(!o||!o.date)return;
+    if(entries[o.date]){skipped++;return}
+    let threads=Array.isArray(o.threads)?o.threads.filter(Boolean).join('\n'):(o.threads||'');
+    if(o.integrityNote)threads+=(threads?'\n':'')+'Reflection: '+o.integrityNote;
+    if(o.tomorrow)threads+=(threads?'\n':'')+'Tomorrow: '+o.tomorrow;
+    entries[o.date]={
+      date:o.date,
+      suit:legacySuit(o.mood),
+      threads,
+      weight:Math.min(10,Math.max(1,parseInt(o.weight,10)||5)),
+      weblines:o.webLine||'',
+      integrity:legacyIntegrity(o.integrityCards),
+      damage:o.damage||'',repair:o.repair||'',
+      sealed:true,sealedAt:0
+    };
+    added++;
+  });
+  save();renderAll();SFX.save();
+  toast(added?`Legacy imported: ${added} added, ${skipped} kept as-is.`:'Legacy dates already present; nothing to add.');
+  if(added)karenSpeak(`Legacy web recovered. ${added} entries restored.`);
+};
 
 /* ================= locker / modal ================= */
 function buildLocker(){
